@@ -5,6 +5,7 @@ use mongodb::Client;
 mod routes;
 mod services;
 
+const DATABASE: &str = "petdb";
 
 #[actix_web::main]
 async fn main() -> Result<()> {
@@ -13,7 +14,7 @@ async fn main() -> Result<()> {
     //creating mongo db connection
     let mongo_uri = std::env::var("MONGO_URI").expect("MONGO_URI must be set");
     let client = Client::with_uri_str(&mongo_uri).await.expect("Failed to connect to MongoDB");
-    let db = client.database("mydatabase");
+    let db = client.database(DATABASE);
     //pass connection  to the app state for reuse
     let app_state = services::pets::AppState { database: db };
     HttpServer::new(move || {
