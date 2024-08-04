@@ -40,8 +40,9 @@ mod tests{
     #[actix_web::test]
     async fn get_all_pets_ok() {
         let mongo_uri = std::env::var("MONGO_URI").expect("MONGO_URI must be set");
-        let client = Client::with_uri_str(&mongo_uri).await.expect("Failed to connect to MongoDB");
-        let db = client.database(DATABASE);
+        let client = Client::with_uri_str(&mongo_uri).await;
+        assert!(client.is_ok());
+        let db = client.unwrap().database(DATABASE);
         //insert a document for testing, clear old data
         let collection: Collection<Pet> = db.collection(COLLECTION_NAME);
         let res = collection.drop().await;
@@ -64,8 +65,9 @@ mod tests{
     #[actix_web::test]
     async fn create_pet_ok() {
         let mongo_uri = std::env::var("MONGO_URI").expect("MONGO_URI must be set");
-        let client = Client::with_uri_str(&mongo_uri).await.expect("Failed to connect to MongoDB");
-        let db = client.database(DATABASE);
+        let client = Client::with_uri_str(&mongo_uri).await;
+        assert!(client.is_ok());
+        let db = client.unwrap().database(DATABASE);
         //insert a document for testing, clear old data
         let collection: Collection<Pet> = db.collection(COLLECTION_NAME);
         let res = collection.drop().await;
