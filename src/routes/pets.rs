@@ -56,15 +56,9 @@ mod tests{
         .app_data(web::Data::new(app_state))
         .service(get_all_pets)).await;
         let req = test::TestRequest::get().uri("/api/v1/pets").to_request();
-        let resp = test::call_service(&app, req).await;
-        println!("{:?}",resp);
-        assert!(resp.status().is_success());
-        let body = test::read_body(resp).await;
-        let body_str = std::str::from_utf8(&body);
-        assert!(body_str.is_ok());
-        println!("{:?}",body_str);
-        let pets: Vec<Pet> = serde_json::from_str(body_str.unwrap()).unwrap();
-        assert_eq!(pets.len(),1);
+        let resp:Vec<Pet>= test::call_and_read_body_json(&app, req).await;
+        assert_eq!(resp.len(),1);
+        assert_eq!(resp[0].name,"Rover");
     }
 
     #[actix_web::test]
