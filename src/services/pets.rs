@@ -11,7 +11,7 @@ pub struct AppState {
 }
 #[derive(Serialize, Deserialize)]
 pub struct Pet {
-    name: String,
+    pub name: String,
 }
 
 // This function will get all pets from the database
